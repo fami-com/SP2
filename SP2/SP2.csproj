@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <AssemblyName>SP2</AssemblyName>
+        <RootNamespace>SP2</RootNamespace>
+        <LangVersion>default</LangVersion>
+        <PackageId>SP2</PackageId>
+        <Authors>SP2</Authors>
+        <Company>SP2</Company>
+        <Product>SP2</Product>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Sprache" Version="2.3.2-develop-00041" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\.gitignore">
+        <Link>.gitignore</Link>
+      </Content>
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,4 @@
+﻿char main()
+{
+    return 'c';
+}
