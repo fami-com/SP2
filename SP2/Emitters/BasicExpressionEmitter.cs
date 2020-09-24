@@ -16,8 +16,8 @@ namespace SP2.Emitters
         {
             code.Add(expression.ToReturn switch
             {
-                char c => $"mov edx, {(int)c}",
-                int n => $"mov edx, {n}",
+                char c => $"mov eax, {(int)c}",
+                int n => $"mov eax, {n}",
                 {} e => throw new Exception($"Unrecognized type: {e}")
             });
         }

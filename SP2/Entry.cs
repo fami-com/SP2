@@ -13,10 +13,12 @@ namespace SP2
             if(args.Length < 2) throw new ArgumentException("Not enough arguments");
             if (args.Length > 2) throw new ArgumentException("Too many arguments");
 
+            var path = args[1];
+            var pathSave = Path.ChangeExtension(path, "asm");
+            
             var parsed = Grammar.Program.Parse(File.ReadAllText(args[1]));
             var emitter = new ProgramEmitter(parsed);
-            Console.WriteLine(emitter.AssemblyI);
-            
+            File.WriteAllText(pathSave, emitter.AssemblyI);
         }
     }
 }

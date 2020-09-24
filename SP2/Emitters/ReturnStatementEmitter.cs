@@ -16,7 +16,6 @@ namespace SP2.Emitters
         public override void Emit()
         {
             code.AddRange(new ExpressionEmitter(returnStatement.Expression).CodeI);
-            code.Add("mov eax, edx");
         }
     }
 }
