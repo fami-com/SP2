@@ -16,10 +16,4 @@
       <PackageReference Include="Sprache" Version="2.3.2-develop-00041" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Content Include="..\.gitignore">
-        <Link>.gitignore</Link>
-      </Content>
-    </ItemGroup>
-
 </Project>

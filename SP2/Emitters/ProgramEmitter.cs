@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using SP2.Blocks;
+using SP2.Tokens;
 
 namespace SP2.Emitters
 {
@@ -47,7 +47,7 @@ namespace SP2.Emitters
         private List<TopLevelEmitter> CreateAndEvaluateEmitters()
         {
             var emitters = prog.All.Select(t => new TopLevelEmitter(t)).ToList();
-            emitters.ForEach(e=>e.Emit());
+            emitters.ForEach(e => e.Emit());
             return emitters;
         }
 

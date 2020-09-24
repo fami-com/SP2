@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
-using SP2.Blocks;
+using SP2.Tokens;
 using Sprache;
 
-namespace SP2.Definitions
+namespace SP2
 {
     internal static class Grammar
     {
@@ -20,14 +20,19 @@ namespace SP2.Definitions
                 from qc in Parse.Char('\'')
                 select c).Token();
 
-        internal static readonly Parser<int> DecimalInt = Parse.Number.Token().Select(x => Convert.ToInt32(x));
+        internal static readonly Parser<int> DecimalInt =
+            (from sign in Parse.Chars('+', '-').Optional()
+                from number in Parse.Number.Text()
+                select Convert.ToInt32((sign.IsEmpty ? " " : sign.Get().ToString()) + number)).Token();
 
         internal static readonly Parser<int> BinaryInt =
             (from prefix in Parse.String("0b")
                 from num in Parse.Chars('0', '1').Many().Text()
                 select Convert.ToInt32(num, 2)).Token();
 
-        internal static readonly Parser<int> Int = DecimalInt.Or(BinaryInt);
+        internal static readonly Parser<int> NonDecimalInt = BinaryInt;
+
+        internal static readonly Parser<int> Int = NonDecimalInt.Or(DecimalInt);
 
         internal static readonly Parser<BasicExpression> BasicExpression =
             Int.Select(x => new BasicExpression(x)).Or(Char.Select(x => new BasicExpression(x)));

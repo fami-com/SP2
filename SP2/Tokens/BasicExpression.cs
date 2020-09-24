@@ -1,4 +1,4 @@
-﻿namespace SP2.Blocks
+﻿namespace SP2.Tokens
 {
     class BasicExpression : Expression
     {
@@ -17,5 +17,7 @@
                 {} x => $"{x}"
             };
         }
+
+
     }
 }

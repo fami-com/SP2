@@ -1,3 +1,3 @@
-﻿int main() {
+﻿int main(){
     return 0b1001001;
 }

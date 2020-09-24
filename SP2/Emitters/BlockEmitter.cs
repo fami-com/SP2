@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using SP2.Blocks;
 
 namespace SP2.Emitters
 {

@@ -1,7 +1,7 @@
-﻿namespace SP2.Blocks
+﻿namespace SP2.Tokens
 {
     class TopLevel
     {
-        
+
     }
 }

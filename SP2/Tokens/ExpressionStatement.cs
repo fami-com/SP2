@@ -1,12 +1,12 @@
-﻿namespace SP2.Blocks
+﻿namespace SP2.Tokens
 {
-    class ReturnStatement : Statement
+    class ExpressionStatement : Statement
     {
         public Expression Expression;
 
         public override string ToString()
         {
-            return $"return {Expression};";
+            return $"{Expression};";
         }
     }
 }
