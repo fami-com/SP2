@@ -4,13 +4,13 @@ using SP2.Tokens;
 
 namespace SP2.Emitters
 {
-    class ProgramEmitter : Emitter
+    internal class ProgramEmitter : Emitter
     {
         private readonly Program prog;
 
         //private List<string> data;
 
-        private List<string> prototypes;
+        private readonly List<string> prototypes;
         
         public override string Assembly =>
             $"\n{string.Join('\n', Code)}";
@@ -34,7 +34,7 @@ namespace SP2.Emitters
             GetAllPrototypes(emitters);
             
             code.AddRange(prototypes);
-            code.AddRange(new []{".code", "_start:", "invoke main"});
+            code.AddRange(new []{".code", "_start:", "invoke main", "ret"});
             
             foreach (var e in emitters)
             {

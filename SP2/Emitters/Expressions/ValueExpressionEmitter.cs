@@ -1,13 +1,13 @@
 ﻿using System;
-using SP2.Tokens;
+using SP2.Tokens.Expressions;
 
-namespace SP2.Emitters
+namespace SP2.Emitters.Expressions
 {
-    class BasicExpressionEmitter : Emitter
+    internal class ValueExpressionEmitter : Emitter
     {
-        private readonly BasicExpression expression;
+        private readonly ValueExpression expression;
 
-        public BasicExpressionEmitter(BasicExpression expr)
+        public ValueExpressionEmitter(ValueExpression expr)
         {
             expression = expr;
         }

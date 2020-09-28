@@ -2,7 +2,7 @@
 
 namespace SP2.Tokens
 {
-    class Program
+    internal class Program
     {
         public List<TopLevel> All;
 

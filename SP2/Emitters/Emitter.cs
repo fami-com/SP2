@@ -2,9 +2,11 @@
 
 namespace SP2.Emitters
 {
-    abstract class Emitter
+    internal abstract class Emitter
     {
+        // ReSharper disable once InconsistentNaming
         protected List<string> code;
+        // ReSharper disable once InconsistentNaming
         protected List<string> data;
         
         public List<string> Code => code;
@@ -20,6 +22,7 @@ namespace SP2.Emitters
         protected Emitter()
         {
             code = new List<string>();
+            data = new List<string>();
         }
         
         private string EmitAndGetAssembly()

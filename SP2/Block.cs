@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using SP2.Tokens;
+using SP2.Tokens.Statements;
 
 namespace SP2
 {
-    class Block : Statement
+    internal class Block : Statement
     {
         public List<Statement> Statements;
 

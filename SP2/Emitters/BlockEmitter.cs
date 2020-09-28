@@ -2,7 +2,7 @@
 
 namespace SP2.Emitters
 {
-    class BlockEmitter : Emitter
+    internal class BlockEmitter : Emitter
     {
         private readonly Block block;
 

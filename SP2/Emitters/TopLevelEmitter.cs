@@ -4,11 +4,11 @@ using SP2.Tokens;
 
 namespace SP2.Emitters
 {
-    class TopLevelEmitter : Emitter
+    internal class TopLevelEmitter : Emitter
     {
         private readonly TopLevel top;
 
-        public List<string> Prototypes;
+        public readonly List<string> Prototypes;
         
         public TopLevelEmitter(TopLevel tl)
         {

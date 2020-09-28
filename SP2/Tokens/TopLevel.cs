@@ -1,6 +1,6 @@
 ﻿namespace SP2.Tokens
 {
-    class TopLevel
+    internal class TopLevel
     {
 
     }

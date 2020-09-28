@@ -1,9 +1,10 @@
 ﻿using System;
 using SP2.Tokens;
+using SP2.Tokens.Statements;
 
 namespace SP2.Emitters
 {
-    class StatementEmitter : Emitter
+    internal class StatementEmitter : Emitter
     {
         private readonly Statement statement;
 

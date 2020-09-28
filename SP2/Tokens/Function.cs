@@ -1,6 +1,6 @@
 ﻿namespace SP2.Tokens
 {
-    class Function : TopLevel
+    internal class Function : TopLevel
     {
         public FunctionDefinition Definition;
         public Block Body;

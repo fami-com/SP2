@@ -1,6 +1,6 @@
 ﻿namespace SP2.Tokens
 {
-    class FunctionDefinition
+    internal class FunctionDefinition
     {
         public string Type;
         public string Name;

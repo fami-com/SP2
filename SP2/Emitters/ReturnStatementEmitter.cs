@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using SP2.Emitters.Expressions;
 using SP2.Tokens;
+using SP2.Tokens.Statements;
 
 namespace SP2.Emitters
 {
-    class ReturnStatementEmitter : Emitter
+    internal class ReturnStatementEmitter : Emitter
     {
         private readonly ReturnStatement returnStatement;
 

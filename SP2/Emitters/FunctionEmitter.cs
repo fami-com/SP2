@@ -3,11 +3,11 @@ using SP2.Tokens;
 
 namespace SP2.Emitters
 {
-    class FunctionEmitter : Emitter
+    internal class FunctionEmitter : Emitter
     {
         private readonly Function function;
 
-        public List<string> Prototypes;
+        public readonly List<string> Prototypes;
 
         public FunctionEmitter(Function func)
         {
