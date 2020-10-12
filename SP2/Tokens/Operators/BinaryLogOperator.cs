@@ -10,8 +10,8 @@ namespace SP2.Tokens.Operators
         {
             Op = @operator switch
             {
-                "&&" => BinaryLogKind.And,
-                "||" => BinaryLogKind.Or,
+                "&&" => BinaryLogKind.And, "and" => BinaryLogKind.And,
+                "||" => BinaryLogKind.Or, "or" => BinaryLogKind.Or,
                 _ => throw new ArgumentException("Unsupported operator found")
             };
         }

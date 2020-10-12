@@ -3,11 +3,11 @@
 
 namespace SP2.Tokens.Expressions
 {
-    internal class BinaryCmpExpression : BinaryExpression
+    internal class BinaryValExpression : BinaryExpression
     {
         public RvalueExpression Lhs;
         public RvalueExpression Rhs;
-        public BinaryCmpOperator Operator;
+        public BinaryValOperator Operator;
 
         public override string ToString() => $"{Lhs} {Operator} {Rhs}";
     }

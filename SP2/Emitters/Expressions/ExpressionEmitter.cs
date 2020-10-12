@@ -5,9 +5,9 @@ namespace SP2.Emitters.Expressions
 {
     internal class ExpressionEmitter : Emitter
     {
-        private readonly Tokens.Expressions.Expression expression;
+        private readonly Expression expression;
 
-        public ExpressionEmitter(Tokens.Expressions.Expression expr)
+        public ExpressionEmitter(Expression expr)
         {
             expression = expr;
         }
@@ -16,8 +16,6 @@ namespace SP2.Emitters.Expressions
         {
             code = expression switch
             {
-                ValueExpression be => new ValueExpressionEmitter(be).CodeI,
-                LvalueExpression le => new LvalueExpressionEmitter(le).CodeI,
                 RvalueExpression re => new RvalueExpressionEmitter(re).CodeI,
                 {} e => throw new Exception($"Unexpected expression: {e}")
             };

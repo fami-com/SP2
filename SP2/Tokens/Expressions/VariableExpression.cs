@@ -1,9 +1,9 @@
-﻿namespace SP2.Tokens.Expressions
+﻿#pragma warning disable 8618
+namespace SP2.Tokens.Expressions
 {
-    internal class VariableExpression
+    internal class VariableExpression : LvalueExpression
     {
-        public readonly string Identifier;
-        public readonly Type Type;
+        public string Identifier;
 
         public override string ToString() => Identifier;
     }

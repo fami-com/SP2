@@ -18,7 +18,7 @@ namespace SP2.Emitters.Expressions
             code.AddRange(new ExpressionEmitter(expression.Lhs).CodeI);
             code.Add("push eax");
             code.AddRange(new ExpressionEmitter(expression.Rhs).CodeI);
-            code.Add("mov edx, eax");
+            code.Add("mov ecx, eax");
             code.Add("pop eax");
 
             var op = expression.Operator.Op switch
@@ -31,7 +31,8 @@ namespace SP2.Emitters.Expressions
                 _ => throw new Exception("Unsupported BinaryBitKind")
             };
             
-            if(op=="sal"||op=="sar") code.Add("");
+            if(op=="sal"||op=="sar") code.Add($"{op} eax, cl");
+            else code.Add($"{op} eax, ecx");
         }
     }
 }

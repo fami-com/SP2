@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using SP2.Emitters.Expressions;
-using SP2.Tokens;
 using SP2.Tokens.Statements;
 
-namespace SP2.Emitters
+namespace SP2.Emitters.Statements
 {
     internal class ExpressionStatementEmitter : Emitter
     {

@@ -1,5 +1,6 @@
 ﻿using System;
 using SP2.Tokens.Expressions;
+using Expression = System.Linq.Expressions.Expression;
 
 namespace SP2.Emitters.Expressions
 {
@@ -7,6 +8,7 @@ namespace SP2.Emitters.Expressions
     {
         private readonly ValueExpression expression;
 
+        private enum S { S, U }
         public ValueExpressionEmitter(ValueExpression expr)
         {
             expression = expr;
@@ -14,12 +16,37 @@ namespace SP2.Emitters.Expressions
 
         public override void Emit()
         {
-            code.Add(expression.ToReturn switch
+            var (op, n, ss) = expression.ToReturn switch
             {
-                char c => $"mov eax, {(int)c}",
-                int n => $"mov eax, {n}",
-                {} e => throw new Exception($"Unrecognized type: {e}")
-            });
+                byte b => ($"mov al, {b}", 1, S.U),
+                sbyte b => ($"mov al, {b}", 1, S.S),
+                short s => ($"mov ax, {s}", 2, S.S),
+                ushort s => ($"mov ax, {s}", 2, S.U),
+                int i => ($"mov eax, {i}", 4, S.S),
+                uint i => ($"mov eax, {i}", 4, S.U),
+                long l => ($"mov rax, {l}", 8, S.S),
+                ulong l => ($"mov rax, {l}", 8, S.U),
+                {} e => throw new Exception($"Unrecognized type: {e.GetType()}")
+            };
+            
+            code.Add(op);
+            if (n == 4) return;
+            
+            var inst = ss switch
+            {
+                S.S => "movsx",
+                S.U => "movzx",
+                _ => throw new Exception("Can't happen")
+            };
+            var src = n switch
+            {
+                1 => "al",
+                2 => "ax",
+                8 => throw new ArgumentOutOfRangeException("64 bit numbers aren't supported"),
+                _ => throw new ArgumentOutOfRangeException(),
+            };
+
+            code.Add($"{inst} eax, {src}");
         }
     }
 }

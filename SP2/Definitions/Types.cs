@@ -2,14 +2,14 @@
 {
     internal class Types
     {
-        public static string Int = "int";
-        public static string Short = "short";
-        public static string Char = "char";
-        public static string Long = "long";
-        public static string LongLong = "long long";
-        public static string LongDouble = "long double";
-        public static string Float = "float";
-        public static string Double = "double";
-        public static string Void = "void";
+        public const string Int = "int";
+        public const string Short = "short";
+        public const string Char = "char";
+        public const string Long = "long";
+        public const string LongLong = "long long";
+        public const string LongDouble = "long double";
+        public const string Float = "float";
+        public const string Double = "double";
+        public const string Void = "void";
     }
 }

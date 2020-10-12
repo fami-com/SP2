@@ -11,8 +11,8 @@ namespace SP2.Tokens.Operators
         {
             Op = @operator switch
             {
-                "~" => UnaryValKind.Bnot,
-                "!" => UnaryValKind.Lnot,
+                "~" => UnaryValKind.Bnot, "compl" => UnaryValKind.Bnot,
+                "!" => UnaryValKind.Lnot, "not" => UnaryValKind.Lnot,
                 "+" => UnaryValKind.Plus,
                 "-" => UnaryValKind.Minus,
                 Keywords.Sizeof => UnaryValKind.Sizeof,

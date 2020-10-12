@@ -18,15 +18,15 @@ namespace SP2.Emitters.Expressions
             code.AddRange(new ExpressionEmitter(expression.Lhs).CodeI);
             code.Add("push eax");
             code.AddRange(new ExpressionEmitter(expression.Rhs).CodeI);
-            code.Add("mov edx, eax");
+            code.Add("mov ecx, eax");
             code.Add("pop eax");
 
             var op = expression.Operator.Op switch
             {
                 BinaryValKind.Add => "add",
                 BinaryValKind.Sub => "sub",
-                BinaryValKind.Mul => "mul",
-                BinaryValKind.Div => "div", BinaryValKind.Mod => "div",
+                BinaryValKind.Mul => "imul",
+                BinaryValKind.Div => "idiv", BinaryValKind.Mod => "idiv",
                 BinaryValKind.Comma => null,
                 _ => throw new Exception("Unsupported BinaryValKind")
             };
@@ -35,11 +35,12 @@ namespace SP2.Emitters.Expressions
             
             if (expression.Operator.Op == BinaryValKind.Add || expression.Operator.Op == BinaryValKind.Sub)
             {
-                code.Add($"{op} eax, edx");
+                code.Add($"{op} eax, ecx");
             }
             else
             {
-                code.Add($"{op} edx");
+                code.Add("cdq");
+                code.Add($"{op} ecx");
                 if (expression.Operator.Op == BinaryValKind.Mod) code.Add("mov eax, edx");
             }
         }

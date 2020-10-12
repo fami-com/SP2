@@ -13,6 +13,5 @@
         AssXor,
         AssSl,
         AssSr,
-    
     }
 }

@@ -5,7 +5,7 @@
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <AssemblyName>SP2</AssemblyName>
         <RootNamespace>SP2</RootNamespace>
-        <LangVersion>default</LangVersion>
+        <LangVersion>8</LangVersion>
         <PackageId>SP2</PackageId>
         <Authors>SP2</Authors>
         <Company>SP2</Company>

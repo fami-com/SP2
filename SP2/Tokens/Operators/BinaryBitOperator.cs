@@ -11,9 +11,9 @@ namespace SP2.Tokens.Operators
         {
             Op = @operator switch
             {
-                "&" =>  BinaryBitKind.And,
-                "|" =>  BinaryBitKind.Or,
-                "^" =>  BinaryBitKind.Xor,
+                "&" => BinaryBitKind.And, "bitand" => BinaryBitKind.And,
+                "|" => BinaryBitKind.Or, "bitor" => BinaryBitKind.Or,
+                "^" => BinaryBitKind.Xor, "bitxor" => BinaryBitKind.Xor,
                 ">>" => BinaryBitKind.Sr,
                 "<<" => BinaryBitKind.Sl,
                 _ => throw new ArgumentException("Unsupported operator found")

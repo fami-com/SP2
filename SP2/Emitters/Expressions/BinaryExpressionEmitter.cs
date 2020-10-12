@@ -1,5 +1,7 @@
 ﻿using System;
+using SP2.Emitters.Expressions.Assignment;
 using SP2.Tokens.Expressions;
+using SP2.Tokens.Expressions.AssignmentExpression;
 using SP2.Tokens.Operators;
 
 namespace SP2.Emitters.Expressions
@@ -17,6 +19,7 @@ namespace SP2.Emitters.Expressions
         {
             code.AddRange(expression switch
             {
+                AssignmentExpression ae => new AssignmentExpressionEmitter(ae).CodeI,
                 BinaryValExpression ve => new BinaryValExpressionEmitter(ve).CodeI,
                 BinaryBitExpression be => new BinaryBitExpressionEmitter(be).CodeI,
                 BinaryCmpExpression ce => new BinaryCmpExpressionEmitter(ce).CodeI,

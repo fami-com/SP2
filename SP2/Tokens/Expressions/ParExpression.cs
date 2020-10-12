@@ -1,8 +1,9 @@
-﻿﻿namespace SP2.Tokens.Expressions
+﻿#pragma warning disable 8618
+namespace SP2.Tokens.Expressions
 {
     internal class ParExpression : RvalueExpression
     {
-        public Expression Expression;
+        public RvalueExpression Expression;
 
         public override string ToString() => $"({Expression})";
     }

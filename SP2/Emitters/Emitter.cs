@@ -16,7 +16,7 @@ namespace SP2.Emitters
         public List<string> DataI => EmitAndGetData();
 
         public abstract void Emit();
-        public virtual string Assembly => string.Join('\n', Code);
+        public virtual string Assembly => string.Join('\n', Code) + "\n";
         public string AssemblyI => EmitAndGetAssembly();
 
         protected Emitter()
@@ -40,7 +40,7 @@ namespace SP2.Emitters
         private List<string> EmitAndGetData()
         {
             Emit();
-            return Code;
+            return Data;
         }
     }
 }

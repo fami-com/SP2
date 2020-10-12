@@ -18,16 +18,20 @@ namespace SP2.Emitters
 
         public override void Emit()
         {
-            if (top is Function fn)
+            switch (top)
             {
-                var fe = new FunctionEmitter(fn);
-                fe.Emit();
-                code = fe.Code;
-                data = fe.Data;
-                Prototypes.AddRange(fe.Prototypes);
+                case Function fn:
+                {
+                    var fe = new FunctionEmitter(fn);
+                    fe.Emit();
+                    code = fe.Code;
+                    data = fe.Data;
+                    Prototypes.AddRange(fe.Prototypes);
+                    break;
+                }
+                case {} e:
+                    throw new Exception($"Unexpected TopLevel: {e}");
             }
-            else if (top is {} e)
-                throw new Exception($"Unexpected TopLevel: {e}");
         }
     }
 }

@@ -1,8 +1,9 @@
-﻿namespace SP2.Tokens
+﻿#pragma warning disable 8618
+namespace SP2.Tokens
 {
     internal class FunctionDefinition
     {
-        public string Type;
+        public Type Type;
         public string Name;
 
         public override string ToString()

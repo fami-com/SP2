@@ -1,97 +1,67 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
+using System.ComponentModel;
 using SP2.Definitions;
 
 namespace SP2.Tokens
 {
-    internal class Type : IEquatable<Type>
+    class Type : IEquatable<Type>
     {
-        public readonly bool Volatile;
-        public readonly bool Const;
-        public readonly bool Signed;
-        public readonly bool Unsigned;
-        public readonly bool Register;
-        
-        public readonly bool Enum;
-        public readonly bool Union;
-        public readonly bool Struct;
+        public readonly TypeKind Kind;
 
-        public readonly string Name;
-
-        public Type(string name, IEnumerable<string> modifiers)
+        public int Size => Kind switch
         {
-            Name = name;
+            TypeKind.Char => 1,
+            TypeKind.Short => 2,
+            TypeKind.Int => 4,
+            TypeKind.Long => 8,
+            TypeKind.LongLong => 8,
+            TypeKind.Void => 0,
+            TypeKind.Float => 4,
+            TypeKind.Double => 8,
+            TypeKind.LongDouble => 10,
+            _ => throw new ArgumentOutOfRangeException()
+        };
 
-            var enumerable = modifiers.ToList();
-            
-            Enum = enumerable.Contains(TypeModifiers.Enum);
-            Const = enumerable.Contains(TypeModifiers.Const);
-            Signed = enumerable.Contains(TypeModifiers.Signed);
-            Unsigned = enumerable.Contains(TypeModifiers.Unsigned);
-            Volatile = enumerable.Contains(TypeModifiers.Volatile);
-            Register = enumerable.Contains(TypeModifiers.Register);
-            Union = enumerable.Contains(TypeModifiers.Union);
-            Struct = enumerable.Contains(TypeModifiers.Struct);
-
-            if ((Enum || Union || Struct) && (Signed || Unsigned))
-                throw new ConstraintException("The type can't be compound and specify signedness");
-            
-            if (Signed && Unsigned) throw new ConstraintException("The type can't be both signed and unsigned");
-            if (Union && Struct) throw new ConstraintException("The type can't be both a union and a struct");
-            if (Enum && Struct) throw new ConstraintException("The type can't be both an enum and a struct");
-            if (Enum && Union) throw new ConstraintException("The type can't be both an enum and a union");
-        }
-
-        public override string ToString()
+        public string Ptr => Kind switch
         {
-            var hold = new List<string>(9);
+            TypeKind.Char =>"byte",
+            TypeKind.Short =>"word",
+            TypeKind.Int =>"dword",
+            TypeKind.Long =>"qword",
+            TypeKind.LongLong =>"qword",
+            TypeKind.Void =>"",
+            TypeKind.Float =>"dword",
+            TypeKind.Double =>"qword",
+            TypeKind.LongDouble =>"tword",
+            _ => throw new ArgumentOutOfRangeException()
+        };
 
-            if (Volatile) hold.Add(TypeModifiers.Volatile);
-            if (Register) hold.Add(TypeModifiers.Register);
-            if (Const) hold.Add(TypeModifiers.Const);
-            if (Signed) hold.Add(TypeModifiers.Signed);
-            if (Unsigned) hold.Add(TypeModifiers.Unsigned);
-            if (Enum) hold.Add(TypeModifiers.Enum);
-            if (Union) hold.Add(TypeModifiers.Union);
-            if (Struct) hold.Add(TypeModifiers.Struct);
-            hold.Add(Name);
+        public Type(string type) => Kind = type switch
+        {
+            "char"=>TypeKind.Int,
+            "short"=>TypeKind.Short,
+            "int"=>TypeKind.Int,
+            "long"=>TypeKind.Long,
+            "long long"=>TypeKind.LongLong,
+            "float"=>TypeKind.Float,
+            "double"=>TypeKind.Double,
+            "long double"=>TypeKind.LongDouble,
+            "void"=>TypeKind.Void,
+            _ => throw new ArgumentOutOfRangeException()
+        };
 
-            return string.Join(' ', hold);
-        }
+        public override string ToString() => Kind.DescriptionAttr();
 
-        public static bool operator ==(Type lhs, Type rhs) => lhs.Volatile == rhs.Volatile && lhs.Const == rhs.Const &&
-                                                              lhs.Signed == rhs.Signed &&
-                                                              lhs.Unsigned == rhs.Unsigned &&
-                                                              lhs.Register == rhs.Register && lhs.Enum == rhs.Enum &&
-                                                              lhs.Struct == rhs.Struct && lhs.Union == rhs.Union &&
-                                                              lhs.Name == rhs.Name;
-        
-        public static bool operator !=(Type lhs, Type rhs) => lhs.Volatile != rhs.Volatile || lhs.Const != rhs.Const ||
-                                                              lhs.Signed != rhs.Signed ||
-                                                              lhs.Unsigned != rhs.Unsigned ||
-                                                              lhs.Register != rhs.Register || lhs.Enum != rhs.Enum ||
-                                                              lhs.Struct != rhs.Struct || lhs.Union != rhs.Union ||
-                                                              lhs.Name != rhs.Name;
+        public static bool operator ==(Type lhs, Type rhs) => lhs.Kind == rhs.Kind;
+        public static bool operator !=(Type lhs, Type rhs) => lhs.Kind != rhs.Kind;
+
+        public bool Equals(Type? other) => other is {} t && this == t;
 
         public override bool Equals(object? obj) => obj is Type t && this == t;
 
         public override int GetHashCode()
         {
-            var hashCode = new HashCode();
-            hashCode.Add(Volatile);
-            hashCode.Add(Const);
-            hashCode.Add(Signed);
-            hashCode.Add(Unsigned);
-            hashCode.Add(Register);
-            hashCode.Add(Enum);
-            hashCode.Add(Union);
-            hashCode.Add(Struct);
-            hashCode.Add(Name);
-            return hashCode.ToHashCode();
+            return (int) Kind;
         }
-
-        public bool Equals(Type? other) => other is { } t && this == t;
     }
 }
