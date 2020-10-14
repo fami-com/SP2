@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using SP2.Definitions;
 using SP2.Tokens;
@@ -11,11 +12,20 @@ using Type = SP2.Tokens.Type;
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable IdentifierTypo
 // ReSharper disable UnusedMember.Global
+// ReSharper disable CommentTypo
 
 namespace SP2
 {
     internal static class Grammar
     {
+        private static Dictionary<string, (int offset, Type t)> _symbolTable = new Dictionary<string, (int offset, Type t)>();
+        private static int _offset = 0;
+        private static void ResetTable()
+        {
+            _symbolTable = new Dictionary<string, (int offset, Type t)>();
+            _offset = 0;
+        }
+
         #region Identifiers
 
         internal static readonly Parser<char> FirstIdentifierChar = Parse.Letter.Or(Parse.Char('_'));
@@ -232,7 +242,7 @@ namespace SP2
         #region Chars
 
         internal static readonly Parser<sbyte> CharSimple =
-            Parse.CharExcept('\'').Select(x => Convert.ToSByte(x));
+            Parse.CharExcept('\'').Select(Convert.ToSByte);
 
         internal static readonly Parser<sbyte> CharSimpleEscape =
             Parse.Char('\\').Then(_ => Parse.AnyChar).Select(x => x.TransformSimpleEscape());
@@ -359,9 +369,17 @@ namespace SP2
                 from expr in Parse.Ref(() => RvalueExpression).Token()
                 from cpar in Parse.Char(')')
                 select new ParExpression {Expression = expr}).Token();
-        
-        internal static readonly Parser<VariableExpression> VarExpression =
-            Identifier.Select(x => new VariableExpression {Identifier = x}).Token();
+
+        internal static Parser<VariableExpression> _varExpression()
+        {
+            return Identifier.Select(x =>
+            {
+                if(!_symbolTable.ContainsKey(x)) throw new Exception($"Variable {x} is being used before declatation.");
+                return new VariableExpression {Identifier = x};
+            }).Token();
+        }
+
+        private static Parser<VariableExpression> VarExpression => _varExpression();
 
         internal static readonly Parser<RvalueExpression> Expr1P = ValueExpression.Or<RvalueExpression>(ParExpression).Or(VarExpression).Token();
 
@@ -524,19 +542,46 @@ namespace SP2
      
         #region Variables
 
-        internal static readonly Parser<VariableDeclaration> VarDeclaration =
-            (from type in Type.Token()
-            from iden in Identifier.Token()
-            from sc in Parse.Char(';').Token()
-            select new VariableDeclaration {Type = type, Identifier = iden}).Token();
+        internal static Parser<VariableDeclaration> _varDeclaration()
+        {
+            return Type.Token()
+                .SelectMany(type => Identifier.Token(), (type, iden) => new {type, iden})
+                .SelectMany(t => Parse.Char(';').Token(),
+                    (t, sc) =>
+                    {
+                        _offset -= t.type.Size;
+                        if(!_symbolTable.TryAdd(t.iden, (_offset, t.type)))
+                        {
+                            throw new Exception($"Variable {t.iden} is already declared");
+                        }
+                        return new VariableDeclaration {Type = t.type, Identifier = t.iden};
+                    }).Token();
+        }
 
-        public static Parser<VariableDeclarationAss> VarDeclarationAss =
-            from type in Type.Token()
-            from iden in Identifier.Token()
-            from eq in Parse.Char('=').Token()
-            from rv in Expression.Token()
-            from sc in Parse.Char(';').Token()
-            select new VariableDeclarationAss {Identifier = iden, Rvalue = rv, Type = type};
+        internal static Parser<VariableDeclaration> VarDeclaration => _varDeclaration();
+
+        internal static Parser<VariableDeclarationAss> _varDeclarationAss()
+        {
+            return Type.Token()
+                .SelectMany(type => Identifier.Token(), (type, iden) => new {type, iden})
+                .SelectMany(t => Parse.Char('=').Token(), (t, eq) => new {t.type,t.iden})
+                .SelectMany(t => Expression.Token(), (t, rv) => new {t.type,t.iden, rv})
+                .SelectMany(t => Parse.Char(';').Token(),
+                    (t, sc) =>
+                    {
+                        _offset -= t.type.Size;
+                        if (!_symbolTable.TryAdd(t.iden, (_offset, t.type)))
+                        {
+                            throw new Exception($"Variable {t.iden} is already declared");
+                        }
+                        return new VariableDeclarationAss
+                        {
+                            Identifier = t.iden, Rvalue = t.rv, Type = t.type
+                        };
+                    }).Token();
+        }
+        
+        internal static Parser<VariableDeclarationAss> VarDeclarationAss => _varDeclarationAss();
 
         #endregion
         
@@ -574,10 +619,17 @@ namespace SP2
             from cparen in Parse.Char(')').Token()
             select new FunctionDefinition {Name = name, Type = type};
 
-        internal static readonly Parser<Function> Function =
-            from def in FunctionDefinition.Token()
-            from body in Block.Token()
-            select new Function {Body = body, Definition = def};
+        private static Parser<Function> _function()
+        {
+            var t = from def in FunctionDefinition.Token()
+                from body in Block.Token()
+                select new Function {Body = body, Definition = def, SymbolTable = _symbolTable, Offset = _offset};
+            ResetTable();
+            return t;
+        }
+
+        internal static Parser<Function> Function => _function();
+
 
         internal static readonly Parser<TopLevel> TopLevel = Function;
 

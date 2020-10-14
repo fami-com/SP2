@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices.ComTypes;
 using Sprache;
 
 namespace SP2.Definitions
@@ -106,21 +104,10 @@ namespace SP2.Definitions
                 '\xE7', '\xE8', '\xE9', '\xEA', '\xEB', '\xEC', '\xED', '\xEE', '\xEF', '\xF0', '\xF1', '\xF2', '\xF3',
                 '\xF4', '\xF5', '\xF6', '\xF7', '\xF8', '\xF9', '\xFA', '\xFB', '\xFC', '\xFD', '\xFE', '\xFF');
 
-        public static readonly Parser<char> ENEAscii = Ascii.Or(EAscii);
+        public static readonly Parser<char> EneAscii = Ascii.Or(EAscii);
 
         public static readonly Parser<byte> AsciiByte = Ascii.Select(x => (byte) x);
         public static readonly Parser<byte> EAsciiByte = EAscii.Select(x => (byte) x);
-        public static readonly Parser<byte> ENEAsciiByte = ENEAscii.Select(x => (byte) x);
-        
-        public static string DescriptionAttr<T>([NotNull] this T source)
-        {
-            FieldInfo fi = source.GetType().GetField(source.ToString());
-
-            DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(
-                typeof(DescriptionAttribute), false);
-
-            if (attributes.Length > 0) return attributes[0].Description;
-            return source.ToString();
-        }
+        public static readonly Parser<byte> EneAsciiByte = EneAscii.Select(x => (byte) x);
     }
 }

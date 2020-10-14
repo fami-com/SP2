@@ -1,4 +1,5 @@
-﻿using SP2.Tokens.Statements;
+﻿using System.Collections.Generic;
+using SP2.Tokens.Statements;
 #pragma warning disable 8618
 
 namespace SP2.Tokens
@@ -7,6 +8,8 @@ namespace SP2.Tokens
     {
         public FunctionDefinition Definition;
         public Block Body;
+        public Dictionary<string, (int offset, Type t)> SymbolTable;
+        public int Offset;
 
         public override string ToString()
         {

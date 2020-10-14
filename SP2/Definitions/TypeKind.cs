@@ -4,6 +4,9 @@ namespace SP2.Definitions
 {
     enum TypeKind
     {
+        [Description("???")]
+        Unknown,
+        
         [Description("char")]
         Char,
         

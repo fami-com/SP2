@@ -24,7 +24,17 @@ namespace SP2.Emitters
             {
                 ".386",
                 ".model flat,stdcall",
-                "option casemap:none"
+                "option casemap:none",
+                @"include \masm32\include\windows.inc",
+                @"include \masm32\macros\macros.asm",
+                @"include \masm32\include\masm32.inc",
+                @"include \masm32\include\user32.inc",
+                @"include \masm32\include\kernel32.inc",
+                @"includelib \masm32\lib\masm32.lib",
+                @"includelib \masm32\lib\user32.lib",
+                @"includelib \masm32\lib\kernel32.lib",
+                ".data",
+                "Cap db \"3-9-CSharp-IO-81-Ivanov\",0"
             };
         }
 
@@ -34,7 +44,7 @@ namespace SP2.Emitters
             GetAllPrototypes(emitters);
             
             code.AddRange(prototypes);
-            code.AddRange(new []{".code", "_start:", "invoke main", "ret"});
+            code.AddRange(new []{".code", "_start:", "invoke main", "invoke MessageBox,0,str$(eax),offset Cap,MB_OK", "ret"});
             
             foreach (var e in emitters)
             {

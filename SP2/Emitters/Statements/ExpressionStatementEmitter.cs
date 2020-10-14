@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SP2.Emitters.Expressions;
 using SP2.Tokens.Statements;
 
@@ -16,7 +17,9 @@ namespace SP2.Emitters.Statements
 
         public override void Emit()
         {
-            code.AddRange(new ExpressionEmitter(expressionStatement.Expression).CodeI);
+            var t =new ExpressionEmitter(expressionStatement.Expression);
+            code = t.CodeI;
         }
+        
     }
 }

@@ -8,13 +8,12 @@ namespace SP2.Emitters.Statements
     internal class BlockEmitter : Emitter
     {
         private readonly Block block;
+        private int stm;
 
-        public readonly List<(string s, Type t)> Symbols;
         
         public BlockEmitter(Block block)
         {
             this.block = block;
-            Symbols = new List<(string s, Type t)>();
         }
 
         public override void Emit()
@@ -22,7 +21,6 @@ namespace SP2.Emitters.Statements
             foreach (var t in block.Statements.Select(s => new StatementEmitter(s)))
             {
                 code.AddRange(t.CodeI);
-                Symbols.AddRange(t.Symbols);
             }
         }
     }

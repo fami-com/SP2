@@ -17,7 +17,8 @@ namespace SP2.Emitters.Expressions
             code = expression switch
             {
                 RvalueExpression re => new RvalueExpressionEmitter(re).CodeI,
-                {} e => throw new Exception($"Unexpected expression: {e}")
+                {} e => throw new Exception($"Unexpected expression: {e}"),
+                _ => code
             };
         }
     }

@@ -7,6 +7,7 @@ namespace SP2.Emitters.Expressions
     {
         private LvalueExpression expression;
         public string Addr;
+        
         public LvalueExpressionEmitter(LvalueExpression expr)
         {
             expression = expr;
@@ -18,12 +19,16 @@ namespace SP2.Emitters.Expressions
             {
                 case VariableExpression ve:
                     var t = new VariableAddressEmitter(ve);
-                    code.AddRange(t.CodeI);
+                    code = t.CodeI;
                     Addr = t.Addr;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(expression));
             }
+            
+#if DEBUG
+            Console.WriteLine($"Lem: {Symbol}");
+#endif
         }
     }
 }

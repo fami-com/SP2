@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using SP2.Tokens;
 using SP2.Tokens.Expressions;
 
 namespace SP2.Emitters.Expressions
@@ -14,15 +16,15 @@ namespace SP2.Emitters.Expressions
 
         public override void Emit()
         {
-            code.AddRange(expression switch
+            code = expression switch
             {
                 BinaryExpression be => new BinaryExpressionEmitter(be).CodeI,
                 UnaryExpression ue => new UnaryExpressionEmitter(ue).CodeI,
                 ParExpression pe => new ParExpressionEmitter(pe).CodeI,
                 ValueExpression ve => new ValueExpressionEmitter(ve).CodeI,
                 LvalueExpression le => new LvalueAsRvalueExpressionEmitter(le).CodeI,
-                {} e => throw new Exception($"Unexpected rvalue expression: {e}")
-            });
+                {} e => throw new Exception($"Unexpected rvalue expression: {e}"),
+            };
         }
     }
 }

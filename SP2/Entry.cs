@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Text.RegularExpressions;
-using SP2.Definitions;
 using SP2.Emitters;
 using Sprache;
 
@@ -9,7 +7,7 @@ namespace SP2
 {
     internal static class Entry
     {
-        private static void Main(string[] args)
+        private static void Main()
         {
             const string path = "3-9-CSharp-IO-81-Ivanov.txt";
             const string pathSave = "3-9-CSharp-IO-81-Ivanov.asm";
@@ -26,19 +24,26 @@ namespace SP2
                 Console.ReadKey();
                 Environment.Exit(2);
             }
-            
+
             try
             {
                 var parsed = Grammar.Program.Parse(input);
                 Console.WriteLine(parsed);
                 var emitter = new ProgramEmitter(parsed);
                 emitter.Emit();
+                Console.WriteLine(emitter.Assembly);
                 File.WriteAllText(pathSave, emitter.Assembly);
             }
             catch (ParseException e)
             {
-                Console.Error.WriteLine(e.Message);
-                //Console.ReadKey();
+                Console.Error.WriteLine($"Error: {e.Message} at {e.Position}");
+                Console.ReadKey();
+                Environment.Exit(1);
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine($"Error: {e.Message}");
+                Console.ReadKey();
                 Environment.Exit(1);
             }
         }

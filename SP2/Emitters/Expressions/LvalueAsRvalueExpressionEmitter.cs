@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SP2.Tokens.Expressions;
 
 namespace SP2.Emitters.Expressions
@@ -11,11 +12,11 @@ namespace SP2.Emitters.Expressions
 
         public override void Emit()
         {
-            code.AddRange(lvalue switch
+            code = lvalue switch
             {
                 VariableExpression ve => new VariableExpressionEmitter(ve).CodeI,
                 _ => throw new ArgumentOutOfRangeException(nameof(lvalue))
-            });
+            };
         }
     }
 }

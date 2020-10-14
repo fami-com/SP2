@@ -36,21 +36,38 @@ namespace SP2.Tokens
             _ => throw new ArgumentOutOfRangeException()
         };
 
-        public Type(string type) => Kind = type switch
+        public Type(string type)
         {
-            "char"=>TypeKind.Int,
-            "short"=>TypeKind.Short,
-            "int"=>TypeKind.Int,
-            "long"=>TypeKind.Long,
-            "long long"=>TypeKind.LongLong,
-            "float"=>TypeKind.Float,
-            "double"=>TypeKind.Double,
-            "long double"=>TypeKind.LongDouble,
-            "void"=>TypeKind.Void,
+            Kind = type switch
+            {
+                "char" => TypeKind.Char,
+                "short" => TypeKind.Short,
+                "int" => TypeKind.Int,
+                "long" => TypeKind.Long,
+                "long long" => TypeKind.LongLong,
+                "float" => TypeKind.Float,
+                "double" => TypeKind.Double,
+                "long double" => TypeKind.LongDouble,
+                "void" => TypeKind.Void,
+                "u" => TypeKind.Unknown,
+                _ => throw new ArgumentOutOfRangeException()
+            };
+        }
+
+        public override string ToString() => Kind switch
+        {
+            TypeKind.Char => "char",
+            TypeKind.Short => "short",
+            TypeKind.Int => "int",
+            TypeKind.Long => "long",
+            TypeKind.LongLong => "long long",
+            TypeKind.Float => "float",
+            TypeKind.Double => "double",
+            TypeKind.LongDouble => "long double",
+            TypeKind.Void => "void",
+            TypeKind.Unknown => "u",
             _ => throw new ArgumentOutOfRangeException()
         };
-
-        public override string ToString() => Kind.DescriptionAttr();
 
         public static bool operator ==(Type lhs, Type rhs) => lhs.Kind == rhs.Kind;
         public static bool operator !=(Type lhs, Type rhs) => lhs.Kind != rhs.Kind;
