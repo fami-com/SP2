@@ -6,22 +6,22 @@ namespace SP2.Emitters.Expressions
 {
     internal class BinaryBitExpressionEmitter : Emitter
     {
-        private readonly BinaryBitExpression expression;
+        private readonly BinaryBitExpression _expression;
 
         public BinaryBitExpressionEmitter(BinaryBitExpression expr)
         {
-            expression = expr;
+            _expression = expr;
         }
         
         public override void Emit()
         {
-            code.AddRange(new ExpressionEmitter(expression.Lhs).CodeI);
+            code.AddRange(new ExpressionEmitter(_expression.Lhs).CodeI);
             code.Add("push eax");
-            code.AddRange(new ExpressionEmitter(expression.Rhs).CodeI);
+            code.AddRange(new ExpressionEmitter(_expression.Rhs).CodeI);
             code.Add("mov ecx, eax");
             code.Add("pop eax");
 
-            var op = expression.Operator.Op switch
+            var op = _expression.Operator.Op switch
             {
                 BinaryBitKind.Or => "or",
                 BinaryBitKind.Xor => "xor",

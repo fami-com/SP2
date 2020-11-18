@@ -1,21 +1,25 @@
 ﻿using System;
+using Microsoft.VisualBasic;
 using SP2.Definitions;
 using SP2.Tokens.Expressions.AssignmentExpression;
 
 namespace SP2.Emitters.Expressions.Assignment
 {
-    class CompoundAssignmentExpressionEmitter : Emitter
+    internal class CompoundAssignmentExpressionEmitter : Emitter
     {
-        private readonly CompoundAssignmentExpression expr;
-        public CompoundAssignmentExpressionEmitter(CompoundAssignmentExpression e) => expr = e;
+        private readonly CompoundAssignmentExpression _expr;
+        public CompoundAssignmentExpressionEmitter(CompoundAssignmentExpression e) => _expr = e;
         public override void Emit()
         {
-            code.AddRange(new ExpressionEmitter(expr.Rvalue).CodeI);
+            code.AddRange(new ExpressionEmitter(_expr.Rvalue).CodeI);
             code.Add("push eax");
-            code.AddRange(new LvalueExpressionEmitter(expr.Lvalue).CodeI);
+            var tmp = new LvalueExpressionEmitter(_expr.Lvalue); tmp.Emit();
+            var addr = tmp.Addr;
+            code.Add($"mov eax, {addr}");
             code.Add("pop ecx");
-            string op = "";
-            switch (expr.Operator.Op)
+            Console.WriteLine(string.Join('\n', code));
+            var op = "";
+            switch (_expr.Operator.Op)
             {
                 case AssOperatorKind.AssAdd:
                     op = "add";
@@ -38,23 +42,22 @@ namespace SP2.Emitters.Expressions.Assignment
                 case AssOperatorKind.AssSr:
                     op = "sar";
                     goto case AssOperatorKind.Ass;
+                case AssOperatorKind.AssMod:
                 case AssOperatorKind.AssDiv:
-                    code.Add("mov eax, [eax]");
                     code.Add("cdq");
                     code.Add("idiv ecx");
-                    if (expr.Operator.Op == AssOperatorKind.AssMod) goto case AssOperatorKind.AssMod;
-                    else break;
-                case AssOperatorKind.AssMod:
-                    code.Add("mov eax, edx");
+                    if (_expr.Operator.Op == AssOperatorKind.AssMod) code.Add("mov eax, edx");
+                    code.Add($"mov {addr}, eax");
                     break;
                 case AssOperatorKind.AssMul:
-                    code.Add("mov eax, [eax]");
                     code.Add("cdq");
                     code.Add("imul ecx");
+                    code.Add($"mov {addr}, eax");
                     break;
                 case AssOperatorKind.Ass:
-                    code.Add($"{op} [eax], ecx");
-                    break;
+                    code.Add($"{op} eax, ecx");
+                    code.Add($"mov {addr}, eax");
+                    return;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Reflection;
 using Sprache;
 
 namespace SP2.Definitions
 {
-    static class Extensions
+    public enum DictMergeOptions
+    {
+        ErrOnDuplicate,
+        UseLeft,
+        UseRight
+    }
+
+    internal static class Extensions
     {
         public static T GetOr<T>(this IOption<T> option, T @default) => option.IsDefined ? option.Get() : @default;
 
@@ -36,50 +40,34 @@ namespace SP2.Definitions
         public static Parser<IEnumerable<char>> Strings(params string[] s) => s.Skip(1).Aggregate(Parse.String(s[0]),
             (current, t) => current.Or(Parse.String(t)));
 
-        /*
-        private static Parser<TRight> OrSpecial<TLeft, TRight>(Parser<TLeft> left, Parser<TRight> right) where TLeft : TRight
+        public static void MergeRanges(
+            this Dictionary<int, HashSet<int>> lhs,
+            Dictionary<int, HashSet<int>> rhs)
         {
-            return left.Select(x=>(TRight)x).Or(right);
+            foreach (var (k,v) in rhs)
+            {
+                if (lhs.ContainsKey(k))
+                {
+                    lhs[k].UnionWith(v);
+                }
+                else
+                {
+                    lhs.Add(k,v);
+                }
+            }
+        }
+
+        public static T GetOrOther<T>(this IOption<T> self, T option)
+        {
+            return self.IsDefined ? self.Get() : option;
+        }
+
+        public static IEnumerable<T> Copy<T>(this IEnumerable<T> input)
+        {
+            var k = new List<T>();
+            return input.Aggregate(k, (current, t) => current.Prepend(t).ToList());
         }
         
-        private static Parser<TRight> XOrSpecial<TLeft, TRight>(Parser<TLeft> left, Parser<TRight> right) where TLeft : TRight
-        {
-            return left.Select(x=>(TRight)x).XOr(right);
-        }
-        
-        public static Parser<TRight> ChainSpecialRightOperator<TLeft, TRight, TOp>(
-            Parser<TOp> op,
-            Parser<TLeft> leftOperand,
-            Parser<TRight> rightOperand,
-            Func<TOp, TLeft, TRight, TRight> apply)
-            where TLeft: TRight
-        {
-            if (op is null) throw new ArgumentNullException(nameof(op));
-            if (leftOperand is null) throw new ArgumentNullException(nameof(leftOperand));
-            if (rightOperand is null) throw new ArgumentNullException(nameof(rightOperand));
-            if (apply is null) throw new ArgumentNullException(nameof(apply));
-
-            return leftOperand.Then(left =>
-                ChainSpecialRightOperatorRest(left, op, leftOperand, rightOperand, apply, OrSpecial));
-        }
-
-        private static Parser<TRight> ChainSpecialRightOperatorRest<TLeft, TRight, TOp>(
-            TRight right,
-            Parser<TOp> op,
-            Parser<TLeft> leftOperand,
-            Parser<TRight> rightOperand,
-            Func<TOp, TLeft, TRight, TRight> apply,
-            Func<Parser<TLeft>, Parser<TRight>, Parser<TRight>> or)
-            where TLeft : TRight
-        {
-            if (op is null) throw new ArgumentNullException(nameof(op));
-            if (leftOperand is null) throw new ArgumentNullException(nameof(leftOperand));
-            if (rightOperand is null) throw new ArgumentNullException(nameof(rightOperand));
-            if (apply is null) throw new ArgumentNullException(nameof(apply));
-            
-            return or(op.Then(opv => ))
-        }*/
-
         public static readonly Parser<char> Ascii =
             Parse.Chars('\x00', '\x01', '\x02', '\x03', '\x04', '\x05', '\x06', '\x07', '\x08', '\x09', '\x0A', '\x0B',
                 '\x0C', '\x0D', '\x0E', '\x0F', '\x10', '\x11', '\x12', '\x13', '\x14', '\x15', '\x16', '\x17', '\x18',

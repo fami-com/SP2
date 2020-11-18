@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Security.Cryptography;
 using SP2.Definitions;
-using Sprache;
 
 namespace SP2.Tokens
 {
@@ -69,15 +67,19 @@ namespace SP2.Tokens
                                                                           lhs.Register == rhs.Register && lhs.Enum == rhs.Enum &&
                                                                           lhs.Struct == rhs.Struct && lhs.Union == rhs.Union &&
                                                                           lhs.Name == rhs.Name;
-        
-        public static bool operator !=(UnusedType lhs, UnusedType rhs) => lhs.Volatile != rhs.Volatile || lhs.Const != rhs.Const ||
-                                                                          lhs.Signed != rhs.Signed ||
-                                                                          lhs.Unsigned != rhs.Unsigned ||
-                                                                          lhs.Register != rhs.Register || lhs.Enum != rhs.Enum ||
-                                                                          lhs.Struct != rhs.Struct || lhs.Union != rhs.Union ||
-                                                                          lhs.Name != rhs.Name;
 
-        public override bool Equals(object? obj) => obj is UnusedType t && this == t;
+        public static bool operator !=(UnusedType lhs, UnusedType rhs) => rhs is { } && lhs is { } &&
+                                                                          (lhs.Volatile != rhs.Volatile ||
+                                                                           lhs.Const != rhs.Const ||
+                                                                           lhs.Signed != rhs.Signed ||
+                                                                           lhs.Unsigned != rhs.Unsigned ||
+                                                                           lhs.Register != rhs.Register ||
+                                                                           lhs.Enum != rhs.Enum ||
+                                                                           lhs.Struct != rhs.Struct ||
+                                                                           lhs.Union != rhs.Union ||
+                                                                           lhs.Name != rhs.Name);
+
+        public override bool Equals(object obj) => obj is UnusedType t && this == t;
 
         public override int GetHashCode()
         {
@@ -94,6 +96,6 @@ namespace SP2.Tokens
             return hashCode.ToHashCode();
         }
 
-        public bool Equals(UnusedType? other) => other is { } t && this == t;
+        public bool Equals(UnusedType other) => other is { } t && this == t;
     }
 }

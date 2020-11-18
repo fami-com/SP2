@@ -8,26 +8,26 @@ namespace SP2.Emitters.Expressions
     {
         private static int _counter;
         private static int Counter => _counter++;
-        private readonly BinaryLogExpression expression;
+        private readonly BinaryLogExpression _expression;
 
         public BinaryLogExpressionEmitter(BinaryLogExpression expr)
         {
-            expression = expr;
+            _expression = expr;
         }
         
         public override void Emit()
         {
             
-            code.AddRange(new ExpressionEmitter(expression.Lhs).CodeI);
+            code.AddRange(new ExpressionEmitter(_expression.Lhs).CodeI);
             code.Add("test eax, eax");
-            switch (expression.Operator.Op)
+            switch (_expression.Operator.Op)
             {
                 case BinaryLogKind.And:
                     var t11 = Counter;
                     var t21 = Counter;
 
                     code.Add($@"jz @L{t11}");
-                    code.AddRange(new ExpressionEmitter(expression.Rhs).CodeI);
+                    code.AddRange(new ExpressionEmitter(_expression.Rhs).CodeI);
                     code.Add("test eax, eax");
                     code.Add($@"jz @L{t11}");
                     code.Add("mov eax, 1");
@@ -42,7 +42,7 @@ namespace SP2.Emitters.Expressions
                     var t32 = Counter;
 
                     code.Add($@"jnz @L{t12}");
-                    code.AddRange(new ExpressionEmitter(expression.Rhs).CodeI);
+                    code.AddRange(new ExpressionEmitter(_expression.Rhs).CodeI);
                     code.Add("test eax, eax");
                     code.Add($@"jz @L{t22}");
                     code.Add($@"@L{t12}:");

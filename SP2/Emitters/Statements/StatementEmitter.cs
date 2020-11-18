@@ -1,23 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using SP2.Tokens.Partial;
 using SP2.Tokens.Statements;
 
 namespace SP2.Emitters.Statements
 {
     internal class StatementEmitter : Emitter
     {
-        private readonly Statement statement;
+        private readonly Statement _statement;
 
         public StatementEmitter(Statement stat)
         {
-            statement = stat;
+            _statement = stat;
         }
 
         public override void Emit()
         {
-            switch (statement)
+            switch (_statement)
             {
+                case null:
+                    code = new List<string>();
+                    break;
                 case Block bs:
                     var tb = new BlockEmitter(bs);
                     code = tb.CodeI;
@@ -36,6 +39,14 @@ namespace SP2.Emitters.Statements
                 case ExpressionStatement es:
                     var ese = new ExpressionStatementEmitter(es);
                     code = ese.CodeI;
+                    break;
+                case ConditionalStatement cd:
+                    var cde = new ConditionalStatementEmitter(cd);
+                    code = cde.CodeI;
+                    break;
+                case Variable vs:
+                    var vse = new PartialVariableEmitter(vs);
+                    code = vse.CodeI;
                     break;
                 case {} e:
                     throw new Exception($"Unxpected expression: {e}");

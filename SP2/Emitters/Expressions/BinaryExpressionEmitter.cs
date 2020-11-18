@@ -2,22 +2,21 @@
 using SP2.Emitters.Expressions.Assignment;
 using SP2.Tokens.Expressions;
 using SP2.Tokens.Expressions.AssignmentExpression;
-using SP2.Tokens.Operators;
 
 namespace SP2.Emitters.Expressions
 {
     internal class BinaryExpressionEmitter : Emitter
     {
-        private readonly BinaryExpression expression;
+        private readonly BinaryExpression _expression;
 
         public BinaryExpressionEmitter(BinaryExpression expr)
         {
-            expression = expr;
+            _expression = expr;
         }
         
         public override void Emit()
         {
-            code.AddRange(expression switch
+            code.AddRange(_expression switch
             {
                 AssignmentExpression ae => new AssignmentExpressionEmitter(ae).CodeI,
                 BinaryValExpression ve => new BinaryValExpressionEmitter(ve).CodeI,

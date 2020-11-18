@@ -1,6 +1,6 @@
 ﻿namespace SP2.Tokens.Expressions.AssignmentExpression
 {
-    class SimpleAssignmentExpression : AssignmentExpression
+    internal class SimpleAssignmentExpression : AssignmentExpression
     {
         
         public override string ToString()

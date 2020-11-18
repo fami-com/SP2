@@ -27,13 +27,13 @@ namespace SP2.Tokens.Operators
         }
 
         public static bool operator ==(BinaryMemOperator lhs, BinaryMemOperator rhs) =>
-            lhs.Op == rhs.Op;
+            lhs is { } && rhs is { } && lhs.Op == rhs.Op;
         public static bool operator !=(BinaryMemOperator lhs, BinaryMemOperator rhs) =>
-            lhs.Op != rhs.Op;
+            lhs is { } && rhs is { } && lhs.Op != rhs.Op;
 
-        public bool Equals(BinaryMemOperator? other) => other is {} t && this == t;
+        public bool Equals(BinaryMemOperator other) => other is {} t && this == t;
 
-        public override bool Equals(object? obj) => obj is BinaryMemOperator o && this == o;
+        public override bool Equals(object obj) => obj is BinaryMemOperator o && this == o;
         public override int GetHashCode() => Op.GetHashCode();
     }
 }

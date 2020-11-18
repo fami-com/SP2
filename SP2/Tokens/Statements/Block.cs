@@ -7,6 +7,7 @@ namespace SP2.Tokens.Statements
     internal class Block : Statement
     {
         public List<Statement> Statements;
+        public int BlockID;
 
         public override string ToString()
         {

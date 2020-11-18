@@ -1,21 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using SP2.Tokens.Expressions;
 
 namespace SP2.Emitters.Expressions
 {
-    class LvalueAsRvalueExpressionEmitter : Emitter
+    internal class LvalueAsRvalueExpressionEmitter : Emitter
     {
-        private LvalueExpression lvalue;
+        private LvalueExpression _lvalue;
 
-        public LvalueAsRvalueExpressionEmitter(LvalueExpression lv) => lvalue = lv;
+        public LvalueAsRvalueExpressionEmitter(LvalueExpression lv) => _lvalue = lv;
 
         public override void Emit()
         {
-            code = lvalue switch
+            code = _lvalue switch
             {
                 VariableExpression ve => new VariableExpressionEmitter(ve).CodeI,
-                _ => throw new ArgumentOutOfRangeException(nameof(lvalue))
+                _ => throw new ArgumentOutOfRangeException(nameof(_lvalue))
             };
         }
     }

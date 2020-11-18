@@ -1,5 +1,6 @@
 ﻿using System;
 using SP2.Definitions;
+#pragma warning disable 162
 
 namespace SP2.Tokens.Operators
 {
@@ -27,13 +28,13 @@ namespace SP2.Tokens.Operators
         };
 
         public static bool operator ==(UnaryMemOperator lhs, UnaryMemOperator rhs) =>
-            lhs.Op == rhs.Op;
+            rhs is { } && lhs is { } && lhs.Op == rhs.Op;
         public static bool operator !=(UnaryMemOperator lhs, UnaryMemOperator rhs) =>
-            lhs.Op != rhs.Op;
+            rhs is { } && lhs is { } && lhs.Op != rhs.Op;
 
-        public bool Equals(UnaryMemOperator? other) => other is {} t && this == t;
+        public bool Equals(UnaryMemOperator other) => other is {} t && this == t;
 
-        public override bool Equals(object? obj) => obj is UnaryMemOperator o && this == o;
+        public override bool Equals(object obj) => obj is UnaryMemOperator o && this == o;
         public override int GetHashCode() => Op.GetHashCode();
     }
 }

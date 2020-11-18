@@ -1,20 +1,17 @@
-﻿using System;
-using System.Reflection.Metadata;
-using SP2.Tokens;
-using SP2.Tokens.Expressions;
+﻿using SP2.Tokens.Expressions;
 
 namespace SP2.Emitters.Expressions
 {
-    class VariableAddressEmitter:Emitter
+    internal class VariableAddressEmitter:Emitter
     {
-        private readonly VariableExpression expr;
+        private readonly VariableExpression _expr;
         public string Addr;
         
-        public VariableAddressEmitter(VariableExpression e) => expr = e;
+        public VariableAddressEmitter(VariableExpression e) => _expr = e;
         
         public override void Emit()
         {
-            Addr = $"#@{expr.Identifier}";
+            Addr = $"#@{_expr.Identifier}";
         }
     }
 }

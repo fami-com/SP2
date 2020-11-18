@@ -1,10 +1,9 @@
 ﻿using System;
-using System.ComponentModel;
 using SP2.Definitions;
 
 namespace SP2.Tokens
 {
-    class Type : IEquatable<Type>
+    internal class Type : IEquatable<Type>
     {
         public readonly TypeKind Kind;
 
@@ -69,12 +68,12 @@ namespace SP2.Tokens
             _ => throw new ArgumentOutOfRangeException()
         };
 
-        public static bool operator ==(Type lhs, Type rhs) => lhs.Kind == rhs.Kind;
-        public static bool operator !=(Type lhs, Type rhs) => lhs.Kind != rhs.Kind;
+        public static bool operator ==(Type lhs, Type rhs) => rhs is { } && lhs is { } && lhs.Kind == rhs.Kind;
+        public static bool operator !=(Type lhs, Type rhs) => rhs is { } && lhs is { } && lhs.Kind != rhs.Kind;
 
-        public bool Equals(Type? other) => other is {} t && this == t;
+        public bool Equals(Type other) => other is {} t && this == t;
 
-        public override bool Equals(object? obj) => obj is Type t && this == t;
+        public override bool Equals(object obj) => obj is Type t && this == t;
 
         public override int GetHashCode()
         {

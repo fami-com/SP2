@@ -6,20 +6,20 @@ namespace SP2.Emitters.Expressions
 {
     internal class UnaryValExpressionEmitter : Emitter
     {
-        private readonly UnaryValExpression expression;
+        private readonly UnaryValExpression _expression;
 
         public UnaryValExpressionEmitter(UnaryValExpression expr)
         {
-            expression = expr;
+            _expression = expr;
         }
 
         public override void Emit()
         {
-            code.AddRange(new ExpressionEmitter(expression.Expression).CodeI);
+            code.AddRange(new ExpressionEmitter(_expression.Expression).CodeI);
 
-            if (expression.Operator.Op == UnaryValKind.Plus) return;
+            if (_expression.Operator.Op == UnaryValKind.Plus) return;
             
-            var op = expression.Operator.Op switch
+            var op = _expression.Operator.Op switch
             {
                 UnaryValKind.Bnot => "not",
                 UnaryValKind.Lnot => "setnz",

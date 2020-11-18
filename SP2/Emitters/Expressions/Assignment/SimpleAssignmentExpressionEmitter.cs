@@ -2,17 +2,17 @@
 
 namespace SP2.Emitters.Expressions.Assignment
 {
-    class SimpleAssignmentExpressionEmitter : Emitter
+    internal class SimpleAssignmentExpressionEmitter : Emitter
     {
-        private readonly SimpleAssignmentExpression expr;
+        private readonly SimpleAssignmentExpression _expr;
 
-        public SimpleAssignmentExpressionEmitter(SimpleAssignmentExpression e) => expr = e;
+        public SimpleAssignmentExpressionEmitter(SimpleAssignmentExpression e) => _expr = e;
         public override void Emit()
         {
-            var lv = new LvalueExpressionEmitter(expr.Lvalue);
+            var lv = new LvalueExpressionEmitter(_expr.Lvalue);
             lv.Emit();
             var addr = lv.Addr;
-            code.AddRange(new ExpressionEmitter(expr.Rvalue).CodeI);
+            code.AddRange(new ExpressionEmitter(_expr.Rvalue).CodeI);
             code.Add($"mov {addr}, eax");
         }
     }

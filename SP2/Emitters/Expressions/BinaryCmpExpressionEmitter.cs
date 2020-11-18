@@ -6,24 +6,24 @@ namespace SP2.Emitters.Expressions
 {
     internal class BinaryCmpExpressionEmitter: Emitter
     {
-        private readonly BinaryCmpExpression expression;
+        private readonly BinaryCmpExpression _expression;
 
         public BinaryCmpExpressionEmitter(BinaryCmpExpression expr)
         {
-            expression = expr;
+            _expression = expr;
         }
         
         public override void Emit()
         {
-            code.AddRange(new ExpressionEmitter(expression.Lhs).CodeI);
+            code.AddRange(new ExpressionEmitter(_expression.Lhs).CodeI);
             code.Add("push eax");
-            code.AddRange(new ExpressionEmitter(expression.Rhs).CodeI);
+            code.AddRange(new ExpressionEmitter(_expression.Rhs).CodeI);
             code.Add("mov ecx, eax");
             code.Add("pop eax");
             
             code.Add("cmp eax, ecx");
 
-            var op = expression.Operator.Op switch
+            var op = _expression.Operator.Op switch
             {
                 BinaryCmpKind.Eq => "sete",
                 BinaryCmpKind.Neq => "setne",
@@ -34,10 +34,8 @@ namespace SP2.Emitters.Expressions
                 _ => throw new Exception("Unsupported BinaryCmpKind")
             };
             
-            code.Add("pushf");
-            code.Add("xor eax, eax");
-            code.Add("popf");
             code.Add($"{op} al");
+            code.Add("movzx eax, al");
         }
     }
 }

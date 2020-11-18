@@ -6,20 +6,20 @@ namespace SP2.Emitters
 {
     internal class ProgramEmitter : Emitter
     {
-        private readonly Program prog;
+        private readonly Program _prog;
 
         //private List<string> data;
 
-        private readonly List<string> prototypes;
+        private readonly List<string> _prototypes;
         
         public override string Assembly =>
             $"\n{string.Join('\n', Code)}";
 
         public ProgramEmitter(Program input)
         {
-            prog = input;
+            _prog = input;
             //data = new List<string>();
-            prototypes = new List<string>();
+            _prototypes = new List<string>();
             code = new List<string>
             {
                 ".386",
@@ -34,7 +34,7 @@ namespace SP2.Emitters
                 @"includelib \masm32\lib\user32.lib",
                 @"includelib \masm32\lib\kernel32.lib",
                 ".data",
-                "Cap db \"3-9-CSharp-IO-81-Ivanov\",0"
+                "Cap db \"5-9-CSharp-IO-81-Ivanov\",0"
             };
         }
 
@@ -43,7 +43,7 @@ namespace SP2.Emitters
             var emitters = CreateAndEvaluateEmitters();
             GetAllPrototypes(emitters);
             
-            code.AddRange(prototypes);
+            code.AddRange(_prototypes);
             code.AddRange(new []{".code", "_start:", "invoke main", "invoke MessageBox,0,str$(eax),offset Cap,MB_OK", "ret"});
             
             foreach (var e in emitters)
@@ -56,14 +56,14 @@ namespace SP2.Emitters
 
         private List<TopLevelEmitter> CreateAndEvaluateEmitters()
         {
-            var emitters = prog.All.Select(t => new TopLevelEmitter(t)).ToList();
+            var emitters = _prog.All.Select(t => new TopLevelEmitter(t)).ToList();
             emitters.ForEach(e => e.Emit());
             return emitters;
         }
 
         private void GetAllPrototypes(List<TopLevelEmitter> topLevelEmitters)
         {
-            topLevelEmitters.ForEach(e => prototypes.AddRange(e.Prototypes));
+            topLevelEmitters.ForEach(e => _prototypes.AddRange(e.Prototypes));
         }
     }
 }

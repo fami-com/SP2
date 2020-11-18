@@ -1,22 +1,21 @@
 ﻿using System;
 using SP2.Tokens.Expressions;
-using Expression = System.Linq.Expressions.Expression;
 
 namespace SP2.Emitters.Expressions
 {
     internal class ValueExpressionEmitter : Emitter
     {
-        private readonly ValueExpression expression;
+        private readonly ValueExpression _expression;
 
         private enum S { S, U }
         public ValueExpressionEmitter(ValueExpression expr)
         {
-            expression = expr;
+            _expression = expr;
         }
 
         public override void Emit()
         {
-            var (op, n, ss) = expression.ToReturn switch
+            var (op, n, ss) = _expression.ToReturn switch
             {
                 byte b => ($"mov al, {b}", 1, S.U),
                 sbyte b => ($"mov al, {b}", 1, S.S),

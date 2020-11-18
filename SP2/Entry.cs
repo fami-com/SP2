@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using SP2.Definitions;
 using SP2.Emitters;
 using Sprache;
 
@@ -9,10 +10,15 @@ namespace SP2
     {
         private static void Main()
         {
-            const string path = "3-9-CSharp-IO-81-Ivanov.txt";
-            const string pathSave = "3-9-CSharp-IO-81-Ivanov.asm";
+#if DEBUG
+            const string path = @"D:\RiderProjects\SP2\SP2\SP2\bin\Release\netcoreapp3.1\5-9-CSharp-IO-81-Ivanov.txt";
+            const string pathSave = @"D:\RiderProjects\SP2\SP2\SP2\bin\Release\netcoreapp3.1\5-9-CSharp-IO-81-Ivanov.asm";
+#else
+            const string path = "5-9-CSharp-IO-81-Ivanov.txt";
+            const string pathSave = "5-9-CSharp-IO-81-Ivanov.asm";
+#endif
 
-            string input = "";
+            var input = "";
 
             try
             {
@@ -25,27 +31,13 @@ namespace SP2
                 Environment.Exit(2);
             }
 
-            try
-            {
-                var parsed = Grammar.Program.Parse(input);
-                Console.WriteLine(parsed);
-                var emitter = new ProgramEmitter(parsed);
-                emitter.Emit();
-                Console.WriteLine(emitter.Assembly);
-                File.WriteAllText(pathSave, emitter.Assembly);
-            }
-            catch (ParseException e)
-            {
-                Console.Error.WriteLine($"Error: {e.Message} at {e.Position}");
-                Console.ReadKey();
-                Environment.Exit(1);
-            }
-            catch (Exception e)
-            {
-                Console.Error.WriteLine($"Error: {e.Message}");
-                Console.ReadKey();
-                Environment.Exit(1);
-            }
+            var parsed = Grammar.Program.Parse(input);
+            Console.WriteLine(parsed);
+            var emitter = new ProgramEmitter(parsed);
+            emitter.Emit();
+            var asm = emitter.Assembly;
+            Console.WriteLine(asm);
+            File.WriteAllText(pathSave, asm);
         }
     }
 }

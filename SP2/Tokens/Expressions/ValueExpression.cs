@@ -1,4 +1,5 @@
-﻿namespace SP2.Tokens.Expressions
+﻿#pragma warning disable 8618
+namespace SP2.Tokens.Expressions
 {
     internal class ValueExpression : RvalueExpression
     {

@@ -1,4 +1,0 @@
-﻿char main()
-{
-    return 'c';
-}

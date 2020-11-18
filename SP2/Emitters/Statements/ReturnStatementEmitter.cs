@@ -6,17 +6,17 @@ namespace SP2.Emitters.Statements
 {
     internal class ReturnStatementEmitter : Emitter
     {
-        private readonly ReturnStatement returnStatement;
+        private readonly ReturnStatement _returnStatement;
 
         public ReturnStatementEmitter(ReturnStatement statement)
         {
-            returnStatement = statement;
+            _returnStatement = statement;
             code = new List<string>();
         }
 
         public override void Emit()
         {
-            code.AddRange(new ExpressionEmitter(returnStatement.Expression).CodeI);
+            code.AddRange(new ExpressionEmitter(_returnStatement.Expression).CodeI);
         }
     }
 }

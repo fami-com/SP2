@@ -8,8 +8,8 @@ namespace SP2.Tokens
     {
         public FunctionDefinition Definition;
         public Block Body;
-        public Dictionary<string, (int offset, Type t)> SymbolTable;
-        public int Offset;
+        public Dictionary<int, Dictionary<string, (int offset, Type t)>> SymbolTable;
+        public Dictionary<int, int> Associations;
 
         public override string ToString()
         {

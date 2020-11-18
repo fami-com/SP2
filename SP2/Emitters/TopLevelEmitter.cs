@@ -6,19 +6,19 @@ namespace SP2.Emitters
 {
     internal class TopLevelEmitter : Emitter
     {
-        private readonly TopLevel top;
+        private readonly TopLevel _top;
 
         public readonly List<string> Prototypes;
         
         public TopLevelEmitter(TopLevel tl)
         {
-            top = tl;
+            _top = tl;
             Prototypes = new List<string>();
         }
 
         public override void Emit()
         {
-            switch (top)
+            switch (_top)
             {
                 case Function fn:
                 {
@@ -29,6 +29,8 @@ namespace SP2.Emitters
                     Prototypes.AddRange(fe.Prototypes);
                     break;
                 }
+                case FunctionDeclaration d:
+                    break;
                 case {} e:
                     throw new Exception($"Unexpected TopLevel: {e}");
             }

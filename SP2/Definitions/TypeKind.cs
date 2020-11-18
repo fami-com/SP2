@@ -2,7 +2,7 @@
 
 namespace SP2.Definitions
 {
-    enum TypeKind
+    internal enum TypeKind
     {
         [Description("???")]
         Unknown,

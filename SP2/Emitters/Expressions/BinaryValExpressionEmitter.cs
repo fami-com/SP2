@@ -6,22 +6,22 @@ namespace SP2.Emitters.Expressions
 {
     internal class BinaryValExpressionEmitter : Emitter
     {
-        private readonly BinaryValExpression expression;
+        private readonly BinaryValExpression _expression;
 
         public BinaryValExpressionEmitter(BinaryValExpression expr)
         {
-            expression = expr;
+            _expression = expr;
         }
 
         public override void Emit()
         {
-            code.AddRange(new ExpressionEmitter(expression.Lhs).CodeI);
+            code.AddRange(new ExpressionEmitter(_expression.Lhs).CodeI);
             code.Add("push eax");
-            code.AddRange(new ExpressionEmitter(expression.Rhs).CodeI);
+            code.AddRange(new ExpressionEmitter(_expression.Rhs).CodeI);
             code.Add("mov ecx, eax");
             code.Add("pop eax");
 
-            var op = expression.Operator.Op switch
+            var op = _expression.Operator.Op switch
             {
                 BinaryValKind.Add => "add",
                 BinaryValKind.Sub => "sub",
@@ -33,7 +33,7 @@ namespace SP2.Emitters.Expressions
 
             if (op is null) return;
             
-            if (expression.Operator.Op == BinaryValKind.Add || expression.Operator.Op == BinaryValKind.Sub)
+            if (_expression.Operator.Op == BinaryValKind.Add || _expression.Operator.Op == BinaryValKind.Sub)
             {
                 code.Add($"{op} eax, ecx");
             }
@@ -41,7 +41,7 @@ namespace SP2.Emitters.Expressions
             {
                 code.Add("cdq");
                 code.Add($"{op} ecx");
-                if (expression.Operator.Op == BinaryValKind.Mod) code.Add("mov eax, edx");
+                if (_expression.Operator.Op == BinaryValKind.Mod) code.Add("mov eax, edx");
             }
         }
     }

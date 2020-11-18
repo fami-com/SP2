@@ -1,17 +1,16 @@
-﻿using System;
-using SP2.Tokens.Expressions;
+﻿using SP2.Tokens.Expressions;
 
 namespace SP2.Emitters.Expressions
 {
-    class VariableExpressionEmitter : Emitter
+    internal class VariableExpressionEmitter : Emitter
     {
-        private readonly VariableExpression expr;
+        private readonly VariableExpression _expr;
 
-        public VariableExpressionEmitter(VariableExpression e) => expr = e;
+        public VariableExpressionEmitter(VariableExpression e) => _expr = e;
         
         public override void Emit()
         {
-            code.Add($"mov eax, #@{expr.Identifier}");
+            code.Add($"mov eax, #@{_expr.Identifier}");
         }
     }
 }

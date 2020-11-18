@@ -2,7 +2,7 @@
 
 namespace SP2.Tokens.Statements
 {
-    class VariableDeclarationAss : Statement
+    internal class VariableDeclarationAss : Statement
     {
         // Don't set directly please, use the properties
         public VariableDeclaration Variable;

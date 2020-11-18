@@ -4,16 +4,16 @@ namespace SP2.Emitters.Expressions
 {
     internal class ParExpressionEmitter : Emitter
     {
-        private readonly ParExpression expression;
+        private readonly ParExpression _expression;
 
         public ParExpressionEmitter(ParExpression expr)
         {
-            expression = expr;
+            _expression = expr;
         }
 
         public override void Emit()
         {
-            code.AddRange(new ExpressionEmitter(expression.Expression).CodeI);
+            code.AddRange(new ExpressionEmitter(_expression.Expression).CodeI);
         }
     }
 }
