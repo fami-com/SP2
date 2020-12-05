@@ -3,7 +3,7 @@ using SP2.Definitions;
 
 namespace SP2.Tokens
 {
-    internal class Type : IEquatable<Type>
+    internal class Type : IEquatable<Type>, IToken
     {
         public readonly TypeKind Kind;
 

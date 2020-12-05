@@ -3,8 +3,8 @@ namespace SP2.Tokens.Expressions
 {
     internal class VariableExpression : LvalueExpression
     {
-        public string Identifier;
+        public Identifier Identifier;
 
-        public override string ToString() => Identifier;
+        public override string ToString() => Identifier.Name;
     }
 }

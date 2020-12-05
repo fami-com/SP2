@@ -48,6 +48,18 @@ namespace SP2.Emitters.Statements
                     var vse = new PartialVariableEmitter(vs);
                     code = vse.CodeI;
                     break;
+                case ForStatement fs:
+                    var fse = new ForLoopEmitter(fs);
+                    code = fse.CodeI;
+                    break;
+                case BreakStatement _:
+                    var bre = new BreakEmitter();
+                    code = bre.CodeI;
+                    break;
+                case ContinueStatement _:
+                    var cre = new ContinueEmitter();
+                    code = cre.CodeI;
+                    break;
                 case {} e:
                     throw new Exception($"Unxpected expression: {e}");
             }

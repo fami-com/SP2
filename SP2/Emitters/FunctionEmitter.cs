@@ -15,8 +15,7 @@ namespace SP2.Emitters
         private readonly Function _function;
 
         public readonly List<string> Prototypes;
-        private readonly Dictionary<int, int> _childrenParent;
-        private readonly Dictionary<int, Dictionary<string, (int offset, Type t)>> _symbolTable;
+        private readonly Dictionary<string, int> _symbolTable;
         private int _ret;
 
         public FunctionEmitter(Function func)
@@ -24,19 +23,22 @@ namespace SP2.Emitters
             _function = func;
             Prototypes = new List<string> {$"{_function.Definition.Name} PROTO"};
             code = new List<string> {$"{_function.Definition.Name} PROC"};
-            _childrenParent = func.Associations;
-            var argumentTable = new Dictionary<string, (int offset, Type t)>();
+            var argumentTable = new Dictionary<string, int>();
             _ret = 0;
             foreach (var t in func.Definition.Variables.AsEnumerable().Reverse())
             {
-                argumentTable.Add(t.Identifier, (_ret+8, t.Type));
+                argumentTable.Add(t.Identifier.Name, _ret+8);
                 _ret += t.Type.Size;
             }
-
-            _symbolTable = _function.SymbolTable;
             
-            _symbolTable[_function.Body.BlockID] = _symbolTable[_function.Body.BlockID].Concat(argumentTable)
+            _symbolTable = _function.Variables.Select((Value, Index) => new {Value, Index = (Index + 1) * -4})
+                .ToDictionary(x => x.Value, x => x.Index);
+
+            _symbolTable = _symbolTable.Concat(argumentTable)
                 .ToDictionary(s => s.Key, s => s.Value);
+            
+            Console.WriteLine(_function.Definition.Name);
+            Console.WriteLine(string.Join(", ", _symbolTable.Select(x => $"{x.Key} => {x.Value}")));
         }
 
         public override void Emit()
@@ -58,18 +60,12 @@ namespace SP2.Emitters
                     continue;
                 }
 
-                var key1 = int.Parse(m.Groups[1].ToString());
                 var key2 = m.Groups[2].ToString();
 
-                while (!_symbolTable[key1].ContainsKey(key2))
-                {
-                    key1 = _childrenParent[key1];
-                }
-
-                var (o, tp) = _symbolTable[key1][key2];
+                var o = _symbolTable[key2];
 
                 if (o < off) off = o;
-                var y= _rx.Replace(s, $"{tp.Ptr} ptr[ebp{o:+###;-###;0}]");
+                var y= _rx.Replace(s, $"dword ptr[ebp{o:+###;-###;+0}]");
 
                 if (y.Contains("mov eax, byte")) y = y.Replace(" eax, byte", "sx eax, byte");
                 else if (y.Contains("mov eax, word")) y = y.Replace(" eax, word", "sx eax, word");
@@ -79,9 +75,9 @@ namespace SP2.Emitters
                 code.Add(y);
             }
 
-            code[idx] = $"sub ebp, {-off}";
+            code[idx] = $"sub esp, {-off}";
 
-            code.Add($"add ebp, {-off}");
+            code.Add($"add esp, {-off}");
             code.Add("mov esp, ebp");
             code.Add("pop ebp");
             code.Add($"ret {_ret}");

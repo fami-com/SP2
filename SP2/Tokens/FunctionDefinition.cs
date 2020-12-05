@@ -4,10 +4,10 @@ using SP2.Tokens.Partial;
 #pragma warning disable 8618
 namespace SP2.Tokens
 {
-    internal class FunctionDefinition
+    internal class FunctionDefinition : IToken
     {
         public Type Type;
-        public string Name;
+        public Identifier Name;
         public List<Variable> Variables;
 
         public override string ToString()

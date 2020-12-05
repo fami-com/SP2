@@ -1,7 +1,7 @@
 ﻿namespace SP2.Tokens
 {
-    internal class TopLevel : IToken
+    interface IToken
     {
-
+        
     }
 }

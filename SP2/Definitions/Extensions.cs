@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Sprache;
 
 namespace SP2.Definitions
@@ -14,6 +15,21 @@ namespace SP2.Definitions
 
     internal static class Extensions
     {
+        public static bool IsValidIdentifierStart(this char c) => c == '_' ||
+                                                                  c >= 'A' && c <= 'Z' ||
+                                                                  c >= 'a' && c <= 'z';
+        
+        public static bool IsValidIdentifierCont(this char c) => c == '_' ||
+                                                                    c >= '0' && c <= '9' ||
+                                                                    c >= 'A' && c <= 'Z' ||
+                                                                    c >= 'a' && c <= 'z';
+
+        public static bool IsValidIdentifier(this string s) => s[0].IsValidIdentifierStart() &&
+                                                               s[1..].Aggregate(true,
+                                                                   (b, c) => b && c.IsValidIdentifierCont());
+
+        public static bool IsNumeric(this string s) => s.Aggregate(true, (b, c) => b && c >= '0' && c <= '9');
+        
         public static T GetOr<T>(this IOption<T> option, T @default) => option.IsDefined ? option.Get() : @default;
 
         public static sbyte TransformSimpleEscape(this char c) => c switch

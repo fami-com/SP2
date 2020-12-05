@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using SP2.Definitions;
 using SP2.Emitters;
 using Sprache;
+using Type = SP2.Tokens.Type;
 
 namespace SP2
 {
@@ -10,12 +13,12 @@ namespace SP2
     {
         private static void Main()
         {
+            const string name = "РГР-9-CSharp-IO-81-Ivanov";
+            var path = $"{name}.txt";
+            var pathSave = $"{name}.asm";
 #if DEBUG
-            const string path = @"D:\RiderProjects\SP2\SP2\SP2\bin\Release\netcoreapp3.1\5-9-CSharp-IO-81-Ivanov.txt";
-            const string pathSave = @"D:\RiderProjects\SP2\SP2\SP2\bin\Release\netcoreapp3.1\5-9-CSharp-IO-81-Ivanov.asm";
-#else
-            const string path = "5-9-CSharp-IO-81-Ivanov.txt";
-            const string pathSave = "5-9-CSharp-IO-81-Ivanov.asm";
+            path = $@"D:\RiderProjects\SP2\SP2\SP2\bin\Release\netcoreapp3.1\{path}";
+            pathSave = $@"D:\RiderProjects\SP2\SP2\SP2\bin\Release\netcoreapp3.1\{pathSave}";
 #endif
 
             var input = "";
@@ -30,14 +33,33 @@ namespace SP2
                 Console.ReadKey();
                 Environment.Exit(2);
             }
+                
+            try
+            {
+                var lexer = new Lexer(input);
+                lexer.Tokenize();
+                foreach (var t in lexer.Tokens)
+                {
+                    Console.WriteLine(t);
+                }
+                
+                var grammar = new Grammar();
+                var parsed = grammar.Program.Parse(input);
+                Console.WriteLine(parsed);
 
-            var parsed = Grammar.Program.Parse(input);
-            Console.WriteLine(parsed);
-            var emitter = new ProgramEmitter(parsed);
-            emitter.Emit();
-            var asm = emitter.Assembly;
-            Console.WriteLine(asm);
-            File.WriteAllText(pathSave, asm);
+                var astw = new AstWriter(parsed);
+                astw.WriteAst();
+                var emitter = new ProgramEmitter(parsed);
+                emitter.Emit();
+                var asm = emitter.Assembly;
+                Console.WriteLine(asm);
+                File.WriteAllText(pathSave, asm);
+            }
+            catch (ParseException e)
+            {
+                Console.WriteLine($"{e.Message}, at row {e.Position.Line}, column {e.Position.Column}");
+                throw;
+            }
         }
     }
 }

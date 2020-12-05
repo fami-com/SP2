@@ -6,7 +6,7 @@ namespace SP2.Tokens.Statements
     internal class VariableDeclaration : Statement, IEquatable<VariableDeclaration>
     {
         public Type Type;
-        public string Identifier;
+        public Identifier Identifier;
 
         public override string ToString() => $"{Type} {Identifier};";
 

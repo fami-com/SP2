@@ -1,6 +1,6 @@
 ﻿namespace SP2.Tokens.Expressions
 {
-    internal abstract class Expression
+    internal abstract class Expression : IToken
     {
 
     }

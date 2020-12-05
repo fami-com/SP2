@@ -1,7 +1,5 @@
 ﻿using System;
-using SP2.Emitters.Expressions.Assignment;
 using SP2.Tokens.Expressions;
-using SP2.Tokens.Expressions.AssignmentExpression;
 
 namespace SP2.Emitters.Expressions
 {

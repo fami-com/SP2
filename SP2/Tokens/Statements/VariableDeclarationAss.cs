@@ -5,24 +5,9 @@ namespace SP2.Tokens.Statements
     internal class VariableDeclarationAss : Statement
     {
         // Don't set directly please, use the properties
-        public VariableDeclaration Variable;
+        public Type Type;
+        public Identifier Identifier;
         public Expression Rvalue;
-
-        public string Identifier
-        {
-            get => Variable.Identifier;
-            set => Variable.Identifier = value;
-        }
-        public Type Type
-        {
-            get => Variable.Type;
-            set => Variable.Type = value;
-        }
-
-        public VariableDeclarationAss()
-        {
-            Variable = new VariableDeclaration();
-        }
 
         public override string ToString()
         {

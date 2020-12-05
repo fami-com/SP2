@@ -2,7 +2,7 @@
 
 namespace SP2.Tokens.Operators
 {
-    internal abstract class Operator
+    internal abstract class Operator : IToken
     {
         public override string ToString()
         {

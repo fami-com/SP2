@@ -3,15 +3,14 @@ using SP2.Tokens.Statements;
 
 namespace SP2.Tokens.Partial
 {
-    class Variable : Statement
+    class ForLoopInit : IToken
     {
-        public Identifier Identifier;
-        public Type Type;
-        
+        public VariableAss Init1;
+        public Expression Init2;
 
         public override string ToString()
         {
-            return $"{Type} {Identifier}";
+            return Init2 is null ? $"{Init1}" : $"{Init2}";
         }
     }
 }

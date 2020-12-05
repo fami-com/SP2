@@ -34,7 +34,7 @@ namespace SP2.Emitters
                 @"includelib \masm32\lib\user32.lib",
                 @"includelib \masm32\lib\kernel32.lib",
                 ".data",
-                "Cap db \"5-9-CSharp-IO-81-Ivanov\",0"
+                "Cap db \"РГР-9-CSharp-IO-81-Ivanov\",0"
             };
         }
 

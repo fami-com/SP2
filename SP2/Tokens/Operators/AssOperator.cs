@@ -30,7 +30,6 @@ namespace SP2.Tokens.Operators
         {
             return Op switch
             {
-
                 AssOperatorKind.Ass => "=",
                 AssOperatorKind.AssAdd => "+=",
                 AssOperatorKind.AssSub => "-=",
